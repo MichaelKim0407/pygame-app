@@ -1,0 +1,10 @@
+# IDE
+.idea/
+
+# Python
+*.py[cod]
+__pycache__
+
+# Pip
+*.egg-info
+dist/
