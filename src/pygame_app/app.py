@@ -6,6 +6,10 @@ import pygame as _pygame
 class PygameApp:
     FPS = 30
 
+    def __init__(self):
+        self._screen: _pygame.surface.Surface = None
+        self._clock: _pygame.time.Clock = None
+
     def handle_event(self, event):
         pass
 
@@ -20,13 +24,21 @@ class PygameApp:
         raise NotImplementedError
 
     @property
-    def fps(self):
+    def desired_fps(self) -> int:
         return self.FPS
+
+    @property
+    def game_time(self) -> float:
+        return _pygame.time.get_ticks() / 1000.0
+
+    @property
+    def actual_fps(self) -> float:
+        return self._clock.get_fps()
 
     def run(self):
         _pygame.init()
-        screen = _pygame.display.set_mode(self.screen_size)
-        clock = _pygame.time.Clock()
+        self._screen = _pygame.display.set_mode(self.screen_size)
+        self._clock = _pygame.time.Clock()
         dt = 0.0
 
         while True:
@@ -37,6 +49,6 @@ class PygameApp:
                 self.handle_event(event)
 
             self.update(dt)
-            self.render(screen)
+            self.render(self._screen)
             _pygame.display.flip()
-            dt = clock.tick(self.fps)
+            dt = self._clock.tick(self.desired_fps)
